@@ -88,6 +88,9 @@ func resourceRecordSetRead(ctx context.Context, d *schema.ResourceData, m interf
 
 	// get ressource id
 	recordId := d.Id()
+	if !dns.IsFqdn(recordId) {
+		return diag.Errorf("Not a fully-qualified DNS name: %s", recordId)
+	}
 
 	// make dns axfr operation
 	labels := dns.SplitDomainName(recordId)
