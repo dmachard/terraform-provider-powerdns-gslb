@@ -25,9 +25,9 @@ provider "pdnsgslb" {
     key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJNN3EH9DaqSe8ClwIJezQTBtHrDn5ThGdC/o9my9n5nND5BOHzE6ybvy0+dw=="
 }
 
-resource "pdnslua_record_set" "svc1" {
+resource "pdnsgslb_lua" "foo" {
   zone = "home.local."
-  name = "test_lua"
+  name = "foo"
   record {
     rrtype = "A"
     ttl = 5
@@ -39,7 +39,6 @@ resource "pdnslua_record_set" "svc1" {
     snippet = "os.date()"
   }
 }
-
 ```
 
-For detailed usage see [provider's documentation page](https://www.terraform.io/docs/providers/pdnslua/index.html)
+For detailed usage see [provider's documentation page](https://registry.terraform.io/providers/dmachard/powerdns-gslb/latest/docs)
