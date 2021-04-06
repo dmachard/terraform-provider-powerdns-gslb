@@ -14,6 +14,16 @@ The following features must be enabled on the PDNS server
 ## Example Usage
 
 ```terraform
+
+terraform {
+  required_providers {
+    pdnsgslb = {
+      version = "1.0.0"
+      source  = "dmachard/powerdns-gslb"
+    }
+  }
+}
+
 # Configure the provider
 provider "pdnsglsb" {
     server        = "10.0.0.210"
