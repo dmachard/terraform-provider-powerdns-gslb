@@ -1,4 +1,4 @@
-# Terraform Provider PowerDNS LUA records
+# Terraform Provider PowerDNS GLSB records
 
 A Terraform provider for PowerDNS server to manage LUA records through DNS updates (RFC2136).
 This provider can be to used to have a dynamic behaviour of your PowerDNS server, such as Global Server Load Balancing.
@@ -8,15 +8,15 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 ```hcl
 terraform {
   required_providers {
-    pdnslua = {
-      version = "0.0.1"
-      source  = "dmachard/pdnslua"
+    pdnsgslb = {
+      version = "1.0.0"
+      source  = "dmachard/powerdns-gslb"
     }
   }
 }
 
 # Configure the DNS Provider
-provider "pdnslua" {
+provider "pdnsgslb" {
     server        = "10.0.0.210"
     port          = 53
     transport     = "tcp"
@@ -28,12 +28,12 @@ provider "pdnslua" {
 resource "pdnslua_record_set" "svc1" {
   zone = "home.local."
   name = "test_lua"
-  lua {
+  record {
     rrtype = "A"
     ttl = 5
-    snippet = "ifportup(8081, {'10.0.0.1', '10.0.0.2'})"
+    snippet = "ifportup(8082, {'10.0.0.1', '10.0.0.2'})"
   }
-  lua {
+  record {
     rrtype = "TXT"
     ttl = 15
     snippet = "os.date()"
