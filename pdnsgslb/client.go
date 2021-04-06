@@ -1,4 +1,4 @@
-package pdnslua
+package pdnsgslb
 
 import (
 	"encoding/hex"

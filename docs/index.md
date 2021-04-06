@@ -1,4 +1,4 @@
-# PowerDNS LUA records Provider
+# PowerDNS GSLB Provider
 
 A Terraform provider for PowerDNS server to manage LUA records through DNS updates (RFC2136).
 This provider can be to used to have a dynamic behaviour of your PowerDNS server, such as Global Server Load Balancing.
@@ -6,14 +6,16 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 ## Requirements
 
 The following features must be enabled on the PDNS server
--  TSIG (RFC 2845) which is required authentication
--  DNS zone transfer, which is required for listing of LUA records.
+- LUA records feature enabled
+- DNS UPDATE enabled 
+- TSIG (RFC 2845) which is required authentication
+- DNS zone transfer, which is required for listing of LUA records.
 
 ## Example Usage
 
 ```terraform
-# Configure the PDNSLUA Provider
-provider "pdnslua" {
+# Configure the provider
+provider "pdnsglsb" {
     server        = "10.0.0.210"
     key_name      = "test."
     key_algo      = "hmac-sha256"
@@ -21,7 +23,7 @@ provider "pdnslua" {
 }
 
 # Create a LUA DNS record
-resource "pdnslua_record_set" "svc1" {
+resource "pdnsgslb_lua" "foo" {
   # ...
 }
 ```

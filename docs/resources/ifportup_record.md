@@ -1,29 +1,28 @@
 ---
-page_title: "pdnsgslb_lua Resource - terraform-provider-powerdns-gslb"
+page_title: "pdnsgslb_ifportup Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
 ---
 
-# pdnsgslb_lua (Resource)
+# pdnsgslb_ifportup (Resource)
 
-Creates a [generic LUA](https://doc.powerdns.com/authoritative/lua-records/) DNS record.
+Creates a [ifportup](https://doc.powerdns.com/authoritative/lua-records/functions.html#ifportup) LUA DNS record. 
 
 ## Example Usage
 
 ```terraform
-resource "pdnsgslb_lua" "svc1" {
+resource "pdnsgslb_ifportup" "foo" {
   zone = "home.local."
-  name = "test_lua"
+  name = "test_ifportup"
   record {
     rrtype = "A"
     ttl = 5
-    snippet = "ifportup(8082, {'10.0.0.1', '10.0.0.2'})"
-  }
-  record {
-    rrtype = "TXT"
-    ttl = 15
-    snippet = "os.date()"
+    port = 443
+    addresses = [ 
+      "127.0.0.1",
+      "127.0.0.2",
+    ]
   }
 }
 ```
@@ -39,14 +38,14 @@ resource "pdnsgslb_lua" "svc1" {
 ### Record set
 
 - **rrtype** (String) The query type of the record (A, AAAA, ...)
-- **snippet** (String) Lua snippet. See PowerDNS [documentation](https://doc.powerdns.com/authoritative/lua-records/index.html#examples) for examples
+- **port** (Number) The port number to test connections to.
 - **ttl** (Number) The TTL of the record. Defaults to 0. Optional argument
-
+- **addresses** (List) A list of strings with the possible IP addresses.
 
 ## Import
 
 Records can be imported using the Record Type and FQDN.
 
 ```
-$ terraform import pdnsgslb_lua.foo foo.example.com.
+$ terraform import pdnsgslb_ifportup.foo foo.example.com.
 ```

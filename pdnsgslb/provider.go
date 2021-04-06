@@ -1,4 +1,4 @@
-package pdnslua
+package pdnsgslb
 
 import (
 	"context"
@@ -44,7 +44,10 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"pdnslua_record_set": resourceRecordSet(),
+			"pdnsgslb_lua":        resourceLua(),
+			"pdnsgslb_pickrandom": resourcePickRandom(),
+			"pdnsgslb_ifportup":   resourceIfPortUp(),
+			"pdnsgslb_ifurlup":    resourceIfUrlUp(),
 		},
 		DataSourcesMap:       map[string]*schema.Resource{},
 		ConfigureContextFunc: providerConfigure,

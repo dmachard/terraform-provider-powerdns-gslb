@@ -1,4 +1,4 @@
-package pdnslua
+package pdnsgslb
 
 import (
 	"context"
@@ -12,12 +12,12 @@ import (
 	"github.com/miekg/dns"
 )
 
-func resourceRecordSet() *schema.Resource {
+func resourceLua() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: resourceRecordSetCreate,
-		ReadContext:   resourceRecordSetRead,
-		UpdateContext: resourceRecordSetUpdate,
-		DeleteContext: resourceRecordSetDelete,
+		CreateContext: resourceLuaCreate,
+		ReadContext:   resourceLuaRead,
+		UpdateContext: resourceLuaUpdate,
+		DeleteContext: resourceLuaDelete,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -32,7 +32,7 @@ func resourceRecordSet() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
-			"lua": {
+			"record": {
 				Type:     schema.TypeList,
 				Required: true,
 				Elem: &schema.Resource{
@@ -57,16 +57,19 @@ func resourceRecordSet() *schema.Resource {
 	}
 }
 
-func resourceRecordSetCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func resourceLuaCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// dns client
 	c := m.(*Client)
 
 	// record id
 	zone := d.Get("zone").(string)
+	if !dns.IsFqdn(zone) {
+		return diag.Errorf("Not a fully-qualified DNS name: %s", zone)
+	}
 	name := d.Get("name").(string)
 	recordId := fmt.Sprintf("%s.%s", name, zone)
 
-	rrset := d.Get("lua").([]interface{})
+	rrset := d.Get("record").([]interface{})
 
 	// make dns update operation
 	_, err := c.doCreate(recordId, rrset)
@@ -76,10 +79,10 @@ func resourceRecordSetCreate(ctx context.Context, d *schema.ResourceData, m inte
 
 	d.SetId(recordId)
 
-	return resourceRecordSetRead(ctx, d, m)
+	return resourceLuaRead(ctx, d, m)
 }
 
-func resourceRecordSetRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func resourceLuaRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// dns client
 	c := m.(*Client)
 
@@ -94,7 +97,7 @@ func resourceRecordSetRead(ctx context.Context, d *schema.ResourceData, m interf
 
 	// make dns axfr operation
 	labels := dns.SplitDomainName(recordId)
-	zone := strings.Join(labels[1:], ".")
+	zone := strings.Join(labels[1:], ".") + "."
 	name := labels[0]
 
 	rr_lua, err := c.doTransfer(recordId)
@@ -102,9 +105,8 @@ func resourceRecordSetRead(ctx context.Context, d *schema.ResourceData, m interf
 		return diag.FromErr(err)
 	}
 
-	lua_list := make([]interface{}, len(rr_lua), len(rr_lua))
-
-	for i, rr := range rr_lua {
+	var records []interface{}
+	for _, rr := range rr_lua {
 		// decode lua
 		rrtype_int, _ := strconv.ParseInt(rr.Rdata[0:4], 16, 64)
 		rrtype := dns.TypeToString[uint16(rrtype_int)]
@@ -112,39 +114,41 @@ func resourceRecordSetRead(ctx context.Context, d *schema.ResourceData, m interf
 
 		urr := make(map[string]interface{})
 		urr["rrtype"] = rrtype
-		urr["snippet"] = snippet
+		urr["snippet"] = string(snippet)
 		urr["ttl"] = rr.Hdr.Ttl
 
-		lua_list[i] = urr
+		records = append(records, urr)
 	}
 
 	d.Set("zone", zone)
 	d.Set("name", name)
-	d.Set("lua", lua_list)
+	if err := d.Set("record", records); err != nil {
+		return diag.Errorf("error setting records for %s: %s", d.Id(), err)
+	}
 
 	return diags
 }
 
-func resourceRecordSetUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func resourceLuaUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// dns client
 	c := m.(*Client)
 
 	// get ressource id
 	recordId := d.Id()
 
-	if d.HasChange("lua") {
-		lua_list := d.Get("lua").([]interface{})
+	if d.HasChange("record") {
+		records := d.Get("record").([]interface{})
 		// make dns update operation
-		_, err := c.doUpdate(recordId, lua_list)
+		_, err := c.doUpdate(recordId, records)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	return resourceRecordSetRead(ctx, d, m)
+	return resourceLuaRead(ctx, d, m)
 }
 
-func resourceRecordSetDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func resourceLuaDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	// dns client and variables
 	c := m.(*Client)
 
