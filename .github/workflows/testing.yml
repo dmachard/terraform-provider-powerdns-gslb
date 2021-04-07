@@ -15,8 +15,16 @@ jobs:
         go-version: '1.15'
     - name: Install pdns-server
       run: |
+        sudo apt-get install -y wget
         sudo go version
         sudo apt-get install -y pdns-server pdns-tools pdns-backend-sqlite3
+        sudo journalctl -xe
+        sudo mkdir /var/db/pdns
+        sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/rel/auth-4.2.x/modules/gsqlite3backend/schema.sqlite3.sql
+        sudo sqlite3 /var/db/pdns/pdns.db
+        sudo .read schema.sqlite3.sql
+        sudo .quit
+        sudo chown -R pdns:pdns /var/db/pdns
     - name: Configure the pdns server
       run: |
         sudo systemctl status pdns
