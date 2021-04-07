@@ -13,7 +13,7 @@ Creates a [pickrandom](https://doc.powerdns.com/authoritative/lua-records/functi
 
 ```terraform
 resource "pdnsgslb_pickrandom" "foo" {
-  zone = "home.local."
+  zone = "home.internal."
   name = "test_pickrandom"
   record {
     rrtype = "A"

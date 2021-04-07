@@ -49,5 +49,6 @@ resource "pdnsgslb_lua" "foo" {
 
 ### Optional
 
-- **port** (Number) The target UDP port on the server where updates are sent to. Defaults to `53`. This can also be specified with `PDNSGLSB_DNSUPDATE_PORT` environment variable.
+- **port** (String) The target UDP port on the server where updates are sent to. Defaults to `53`. This can also be specified with `PDNSGLSB_DNSUPDATE_PORT` environment variable.
 - **transport** (String) Transport to use for DNS queries. Valid values are udp, udp4, udp6, tcp, tcp4, or tcp6. Defaults to `tcp`. This can also be specified with `PDNSGLSB_DNSUPDATE_TRANSPORT` environment variable.
+- **retries** (String) How many times to retry on connection timeout. Defaults to `2`. Optional parameter

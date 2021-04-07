@@ -13,7 +13,7 @@ Creates a [ifportup](https://doc.powerdns.com/authoritative/lua-records/function
 
 ```terraform
 resource "pdnsgslb_ifportup" "foo" {
-  zone = "home.local."
+  zone = "home.internal."
   name = "test_ifportup"
   record {
     rrtype = "A"

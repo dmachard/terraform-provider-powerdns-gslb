@@ -23,19 +23,20 @@ type Client struct {
 	KeyName   string
 	KeyAlgo   string
 	KeySecret string
+	Retries   int
 }
 
-func NewClient(server string, port int, transport string, keyname string, keysecret string, keyalgo string) (*Client, error) {
+func NewClient(server string, port int, transport string, keyname string, keysecret string, keyalgo string, retries int) (*Client, error) {
 	c := Client{
 		DNSClient: &dns.Client{},
 		SrvAddr:   net.JoinHostPort(server, strconv.Itoa(port)),
 		KeyName:   keyname,
 		KeySecret: keysecret,
+		Retries:   retries,
 	}
 
 	c.DNSClient.Net = transport
 	c.DNSClient.TsigProvider = tsig.HMAC{keyname: keysecret}
-
 	keyalgo, err := convertTsigAlgo(keyalgo)
 	if err != nil {
 		return nil, err
@@ -46,6 +47,9 @@ func NewClient(server string, port int, transport string, keyname string, keysec
 }
 
 func (c *Client) doTransfer(record string) ([]*dns.RFC3597, error) {
+	// init retries counter
+	retries := c.Retries
+
 	labels := dns.SplitDomainName(record)
 	zone := dns.Fqdn(strings.Join(labels[1:], "."))
 
@@ -57,9 +61,15 @@ func (c *Client) doTransfer(record string) ([]*dns.RFC3597, error) {
 	dnsmsg.SetAxfr(zone)
 	dnsmsg.SetTsig(c.KeyName, c.KeyAlgo, 300, time.Now().Unix())
 
+RetryTransfer:
 	in, err := dnstransfer.In(dnsmsg, c.SrvAddr)
 	if err != nil {
-		return nil, fmt.Errorf("Error axfr zone: %s", err)
+		// retry on transfer error
+		if retries > 0 {
+			retries--
+			goto RetryTransfer
+		}
+		return nil, fmt.Errorf("Error on axfr zone: %s", err)
 	}
 
 	var lua_records []*dns.RFC3597
@@ -112,18 +122,12 @@ func (c *Client) doCreate(record string, rrset []interface{}) (*dns.Msg, error) 
 
 		dnsmsg.Insert([]dns.RR{dns_rr})
 	}
-	// add tsig key
-	dnsmsg.SetTsig(c.KeyName, c.KeyAlgo, 300, time.Now().Unix())
 
 	// send dns query
-	r, _, err := c.DNSClient.Exchange(dnsmsg, c.SrvAddr)
+	r, err := c.doExchange(dnsmsg)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating DNS LUA record: %s", err)
 	}
-	if r.Rcode != dns.RcodeSuccess {
-		return nil, fmt.Errorf("Error creating DNS LUA record: %v (%s)", r.Rcode, dns.RcodeToString[r.Rcode])
-	}
-
 	return r, nil
 }
 
@@ -164,18 +168,11 @@ func (c *Client) doUpdate(record string, rrset []interface{}) (*dns.Msg, error) 
 		dnsmsg.Insert([]dns.RR{rr_insert})
 	}
 
-	// add tsig key
-	dnsmsg.SetTsig(c.KeyName, c.KeyAlgo, 300, time.Now().Unix())
-
 	// send dns update
-	r, _, err := c.DNSClient.Exchange(dnsmsg, c.SrvAddr)
+	r, err := c.doExchange(dnsmsg)
 	if err != nil {
 		return nil, fmt.Errorf("Error updating DNS LUA record: %s", err)
 	}
-	if r.Rcode != dns.RcodeSuccess {
-		return nil, fmt.Errorf("Error updating DNS LUA record: %v (%s)", r.Rcode, dns.RcodeToString[r.Rcode])
-	}
-
 	return r, nil
 }
 
@@ -196,19 +193,50 @@ func (c *Client) doDelete(record string) (*dns.Msg, error) {
 
 	dnsmsg.RemoveRRset([]dns.RR{rr})
 
-	// add tsig key
-	dnsmsg.SetTsig(c.KeyName, c.KeyAlgo, 300, time.Now().Unix())
-
 	// send dns delete
-	r, _, err := c.DNSClient.Exchange(dnsmsg, c.SrvAddr)
+	r, err := c.doExchange(dnsmsg)
 	if err != nil {
 		return nil, fmt.Errorf("Error deleting DNS LUA record: %s", err)
 	}
+	return r, nil
+}
+
+func (c *Client) doExchange(dnsmsg *dns.Msg) (*dns.Msg, error) {
+	// init retries counter
+	retries := c.Retries
+
+	// add tsig key
+	dnsmsg.SetTsig(c.KeyName, c.KeyAlgo, 300, time.Now().Unix())
+
+RetryDnsOperation:
+	// make dns operation
+	r, _, err := c.DNSClient.Exchange(dnsmsg, c.SrvAddr)
+	if err != nil {
+		// retry on network failure
+		if retries > 0 {
+			retries--
+			goto RetryDnsOperation
+		}
+		return nil, err
+	}
+	// retry on dns failure
+	if r.Rcode == dns.RcodeServerFailure && retries > 0 {
+		retries--
+		goto RetryDnsOperation
+	}
+
+	// dns success ?
 	if r.Rcode != dns.RcodeSuccess {
-		return nil, fmt.Errorf("Error deleting DNS LUA record: %v (%s)", r.Rcode, dns.RcodeToString[r.Rcode])
+		return nil, fmt.Errorf("invalid dns return code: %v (%s)", r.Rcode, dns.RcodeToString[r.Rcode])
 	}
 
 	return r, nil
+}
+
+func isTimeout(err error) bool {
+
+	timeout, ok := err.(net.Error)
+	return ok && timeout.Timeout()
 }
 
 func convertTsigAlgo(name string) (string, error) {

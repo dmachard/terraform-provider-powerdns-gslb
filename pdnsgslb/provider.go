@@ -2,8 +2,6 @@ package pdnsgslb
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -11,8 +9,9 @@ import (
 )
 
 const (
-	defaultPort      = 53
+	defaultPort      = "53"
 	defaultTransport = "tcp"
+	defaultRetries   = "2"
 )
 
 // Provider -
@@ -25,24 +24,19 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_SERVER", nil),
 			},
 			"port": {
-				Type:     schema.TypeInt,
-				Optional: true,
-				DefaultFunc: func() (interface{}, error) {
-					if envPortStr := os.Getenv("PDNSGLSB_DNSUPDATE_PORT"); envPortStr != "" {
-						port, err := strconv.Atoi(envPortStr)
-						if err != nil {
-							err = fmt.Errorf("invalid PDNSGLSB_DNSUPDATE_PORT environment variable: %s", err)
-						}
-						return port, err
-					}
-
-					return defaultPort, nil
-				},
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_PORT", defaultPort),
 			},
 			"transport": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_TRANSPORT", defaultTransport),
+			},
+			"retries": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_RETRIES", defaultRetries),
 			},
 			"key_name": {
 				Type:        schema.TypeString,
@@ -73,16 +67,29 @@ func Provider() *schema.Provider {
 
 func providerConfigure(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	server := data.Get("server").(string)
-	port := data.Get("port").(int)
 	transport := data.Get("transport").(string)
 	keyname := data.Get("key_name").(string)
 	keyalgo := data.Get("key_algo").(string)
 	keysecret := data.Get("key_secret").(string)
 
+	// convert string port to int
+	port := data.Get("port").(string)
+	port_int, err := strconv.Atoi(port)
+	if err != nil {
+		return nil, diag.Errorf("invalid port: %s", port_int)
+	}
+
+	// convert string retries value to int
+	retries := data.Get("retries").(string)
+	retries_int, err := strconv.Atoi(retries)
+	if err != nil {
+		return nil, diag.Errorf("invalid retries: %s", retries)
+	}
+
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	c, err := NewClient(server, port, transport, keyname, keysecret, keyalgo)
+	c, err := NewClient(server, port_int, transport, keyname, keysecret, keyalgo, retries_int)
 	if err != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,

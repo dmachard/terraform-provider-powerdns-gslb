@@ -13,7 +13,7 @@ Creates a [ifurlup](https://doc.powerdns.com/authoritative/lua-records/functions
 
 ```terraform
 resource "pdnsgslb_ifurlup" "foo" {
-  zone = "home.local."
+  zone = "home.internal."
   name = "test_ifurlup2"
   record {
     rrtype = "A"

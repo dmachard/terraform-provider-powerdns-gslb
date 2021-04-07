@@ -13,7 +13,7 @@ Creates a [generic LUA](https://doc.powerdns.com/authoritative/lua-records/) DNS
 
 ```terraform
 resource "pdnsgslb_lua" "svc1" {
-  zone = "home.local."
+  zone = "home.internal."
   name = "test_lua"
   record {
     rrtype = "A"
