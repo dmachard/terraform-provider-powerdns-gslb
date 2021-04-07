@@ -32,5 +32,5 @@ jobs:
         sudo docker exec powerdns pdnsutil set-meta test.internal TSIG-ALLOW-AXFR ${PDNSGLSB_DNSUPDATE_KEYNAME}
         sudo docker exec powerdns pdnsutil set-meta test.internal ALLOW-DNSUPDATE-FROM 0.0.0.0/0
     - name: Running tests
-      rn: |
+      run: |
         go test ./pdnsgslb/
