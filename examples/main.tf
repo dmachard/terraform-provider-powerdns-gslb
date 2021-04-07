@@ -10,14 +10,15 @@ terraform {
 
 # Configure the DNS Provider
 provider "pdnsgslb" {
-    server        = "10.0.0.210"
-    key_name      = "test."
+    server        = "10.0.0.211"
+    port = "5353"
+    key_name      = "keytest."
     key_algo      = "hmac-sha256"
-    key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJNN3EH9DaqSe8ClwIJezQTBtHrDn5ThGdC/o9my9n5nND5BOHzE6ybvy0+dw=="
+    key_secret    = "+0GMb2Hak8WiMETQjOCEpTTdRjgym6xJbU/W+Fv+jGsFi9Y0LxG82rRFxf4rdOKihUASU2BTCyCskSKFo+o6pw=="
 }
 
 resource "pdnsgslb_lua" "res1" {
-  zone = "home.internal."
+  zone = "test.internal."
   name = "pdnslua"
   record {
     rrtype = "A"
@@ -89,7 +90,7 @@ resource "pdnsgslb_ifurlup" "res4" {
 
 resource "pdnsgslb_ifurlup" "res5" {
   zone = "home.internal."
-  name = "ifurlup_backup"
+  name = "ifurlup_backupgo"
   record {
     rrtype = "A"
     ttl = 5

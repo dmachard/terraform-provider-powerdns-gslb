@@ -13,7 +13,21 @@ jobs:
     - uses: actions/setup-go@v1
       with:
         go-version: '1.15'
-    - name: Install pdns-server
+    - name: Define enviroment variables
+      run: |
+        echo "Tsig key name > ${KEYNAME}"
+        echo "Tsig secret > ${SECRET}"
+      env:
+        SECRET: "i4Yx6bmTJBRVLWub97qJqull3xZVIak4wz5P4x5HudIqnQ9X56x7befQAvqgGEdk5LOD0vqwomiZZb+OmTvTQQ=="
+        KEYNAME: "keytest"
+    - name: Deploy powerdns auth docker image
       run: |
         sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/pdns-auth-44
         sudo netstat -anp |grep 5353
+    - name: Configure powerdns
+      run: |
+        sudo docker exec -it powerdns pdnsutil create-zone test.internal ns1.test.internal
+        sudo docker exec -it powerdns pdnsutil import-tsig-key ${KEYNAME} hmac-sha256 ${SECRET}
+        sudo docker exec -it powerdns pdnsutil set-meta test.internal TSIG-ALLOW-DNSUPDATE ${KEYNAME}
+        sudo docker exec -it powerdns pdnsutil set-meta test.internal TSIG-ALLOW-AXFR ${KEYNAME}
+        sudo docker exec -it powerdns pdnsutil set-meta test.internal ALLOW-DNSUPDATE-FROM 0.0.0.0/0
