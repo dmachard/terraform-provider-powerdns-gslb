@@ -42,12 +42,12 @@ resource "pdnsgslb_lua" "foo" {
 
 ### Required
 
-- **key_algo** (String) The algorithm to use for HMAC TSIG authentication.
-- **key_name** (String) The name of the TSIG key used to sign the DNS update messages.
-- **key_secret** (String) A Base64-encoded string containing the shared secret to be used for TSIG.
-- **server** (String) The hostname or IP address of the DNS server to send updates to.
+- **server** (String) The hostname or IP address of the DNS server to send updates to. This can also be specified with `PDNSGLSB_DNSUPDATE_SERVER` environment variable.
+- **key_algo** (String) The algorithm to use for HMAC TSIG authentication. This can also be specified with `PDNSGLSB_DNSUPDATE_KEYALGORITHM` environment variable.
+- **key_name** (String) The name of the TSIG key used to sign the DNS update messages. This can also be specified with `PDNSGLSB_DNSUPDATE_KEYNAME` environment variable.
+- **key_secret** (String) A Base64-encoded string containing the shared secret to be used for TSIG. This can also be specified with `PDNSGLSB_DNSUPDATE_SECRET` environment variable.
 
 ### Optional
 
-- **port** (Number) The target UDP port on the server where updates are sent to. Defaults to 53.
-- **transport** (String) Transport to use for DNS queries. Valid values are udp, udp4, udp6, tcp, tcp4, or tcp6. Defaults to tcp.
+- **port** (Number) The target UDP port on the server where updates are sent to. Defaults to `53`. This can also be specified with `PDNSGLSB_DNSUPDATE_PORT` environment variable.
+- **transport** (String) Transport to use for DNS queries. Valid values are udp, udp4, udp6, tcp, tcp4, or tcp6. Defaults to `tcp`. This can also be specified with `PDNSGLSB_DNSUPDATE_TRANSPORT` environment variable.

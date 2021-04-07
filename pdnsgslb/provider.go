@@ -2,6 +2,9 @@ package pdnsgslb
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -17,30 +20,44 @@ func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"server": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_SERVER", nil),
 			},
 			"port": {
 				Type:     schema.TypeInt,
 				Optional: true,
-				Default:  defaultPort,
+				DefaultFunc: func() (interface{}, error) {
+					if envPortStr := os.Getenv("PDNSGLSB_DNSUPDATE_PORT"); envPortStr != "" {
+						port, err := strconv.Atoi(envPortStr)
+						if err != nil {
+							err = fmt.Errorf("invalid PDNSGLSB_DNSUPDATE_PORT environment variable: %s", err)
+						}
+						return port, err
+					}
+
+					return defaultPort, nil
+				},
 			},
 			"transport": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  defaultTransport,
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_TRANSPORT", defaultTransport),
 			},
 			"key_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_KEYNAME", nil),
 			},
 			"key_algo": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_KEYALGORITHM", nil),
 			},
 			"key_secret": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PDNSGLSB_DNSUPDATE_KEYSECRET", nil),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
