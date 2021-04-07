@@ -11,7 +11,7 @@ env:
   PDNSGLSB_DNSUPDATE_KEYALGORITHM: "hmac-sha256"
   PDNSGLSB_DNSUPDATE_KEYSECRET: "i4Yx6bmTJBRVLWub97qJqull3xZVIak4wz5P4x5HudIqnQ9X56x7befQAvqgGEdk5LOD0vqwomiZZb+OmTvTQQ=="
   PDNSGLSB_DNSUPDATE_KEYNAME: "keytest"
-
+  TF_ACC: "true"
 jobs:
   release:
     runs-on: ubuntu-20.04
