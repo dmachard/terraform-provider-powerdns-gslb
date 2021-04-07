@@ -15,7 +15,7 @@ jobs:
         go-version: '1.15'
     - name: Install pdns-server
       run: |
-      sudo go --version
+        sudo go --version
         sudo apt-get install -y pdns-server pdns-tools pdns-backend-sqlite3
     - name: Configure the pdns server
       run: |
