@@ -17,6 +17,7 @@ jobs:
       run: |
         sudo apt-get install -y wget net-tools
         sudo go version
+        sudo systemctl stop systemd-resolved
         sudo apt-get install -y pdns-server pdns-tools pdns-backend-sqlite3
         sudo systemctl stop pdns
         #sudo journalctl -xe
