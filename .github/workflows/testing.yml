@@ -17,8 +17,8 @@ jobs:
       run: |
         sudo apt-get install -y wget net-tools
         sudo go version
-        sudo netstat -anp | grep 53
-        #sudo apt-get install -y pdns-server pdns-tools pdns-backend-sqlite3
+        sudo apt-get install -y pdns-server pdns-tools pdns-backend-sqlite3
+        sudo systemctl stop pdns
         #sudo journalctl -xe
         #sudo mkdir /var/db/pdns
         #sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/rel/auth-4.2.x/modules/gsqlite3backend/schema.sqlite3.sql
