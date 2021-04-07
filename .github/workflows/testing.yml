@@ -19,8 +19,8 @@ jobs:
         go-version: '1.15'
     - name: Define enviroment variables
       run: |
-        echo "Tsig key name > ${env.KEYNAME}"
-        echo "Tsig secret > ${env.SECRET}"
+        echo "Tsig key name > ${{env.KEYNAME }}"
+        echo "Tsig secret > ${{ env.SECRET }}"
     - name: Deploy powerdns auth docker image
       run: |
         sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/pdns-auth-44
