@@ -76,7 +76,7 @@ func providerConfigure(ctx context.Context, data *schema.ResourceData) (interfac
 	port := data.Get("port").(string)
 	port_int, err := strconv.Atoi(port)
 	if err != nil {
-		return nil, diag.Errorf("invalid port: %s", port_int)
+		return nil, diag.Errorf("invalid port: %s", port)
 	}
 
 	// convert string retries value to int
