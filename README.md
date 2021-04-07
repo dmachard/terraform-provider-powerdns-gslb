@@ -20,7 +20,7 @@ provider "pdnsgslb" {
     server        = "10.0.0.210"
     key_name      = "test."
     key_algo      = "hmac-sha256"
-    key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJNN3EH9DaqSe8ClwIJezQTBtHrDn5ThGdC/o9my9n5nND5BOHzE6ybvy0+dw=="
+    key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJN.....ND5BOHzE6ybvy0+dw=="
 }
 
 resource "pdnsgslb_lua" "foo" {
