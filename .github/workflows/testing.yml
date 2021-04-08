@@ -10,7 +10,7 @@ env:
   PDNSGLSB_DNSUPDATE_PORT: "5353"
   PDNSGLSB_DNSUPDATE_KEYALGORITHM: "hmac-sha256"
   PDNSGLSB_DNSUPDATE_KEYSECRET: "i4Yx6bmTJBRVLWub97qJqull3xZVIak4wz5P4x5HudIqnQ9X56x7befQAvqgGEdk5LOD0vqwomiZZb+OmTvTQQ=="
-  PDNSGLSB_DNSUPDATE_KEYNAME: "keytest"
+  PDNSGLSB_DNSUPDATE_KEYNAME: "keytest."
   TF_ACC: "true"
 jobs:
   release:
@@ -31,6 +31,7 @@ jobs:
         sudo docker exec powerdns pdnsutil set-meta test.internal TSIG-ALLOW-DNSUPDATE ${PDNSGLSB_DNSUPDATE_KEYNAME}
         sudo docker exec powerdns pdnsutil set-meta test.internal TSIG-ALLOW-AXFR ${PDNSGLSB_DNSUPDATE_KEYNAME}
         sudo docker exec powerdns pdnsutil set-meta test.internal ALLOW-DNSUPDATE-FROM 0.0.0.0/0
+        sudo docker exec powerdns ls -alrt /etc/powerdns
     - name: Running tests
       run: |
         go test ./pdnsgslb/
