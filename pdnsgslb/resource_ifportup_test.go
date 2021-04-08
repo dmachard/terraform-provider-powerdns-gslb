@@ -8,27 +8,27 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-func TestAccPdnsgslbLua_basic(t *testing.T) {
+func TestAccPdnsgslbIfportup_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPdnsgslbLuaDestroy,
+		CheckDestroy: testAccCheckPdnsgslbIfportupDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckPdnsgslbLuaConfig_basic,
+				Config: testAccCheckPdnsgslbIfportupConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbLuaExists("pdnsgslb_lua.testlua"),
+					testAccCheckPdnsgslbIfportupExists("pdnsgslb_ifportup.testifportup"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckPdnsgslbLuaDestroy(s *terraform.State) error {
+func testAccCheckPdnsgslbIfportupDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "pdnsgslb_lua" {
+		if rs.Type != "pdnsgslb_ifportup" {
 			continue
 		}
 
@@ -43,7 +43,7 @@ func testAccCheckPdnsgslbLuaDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckPdnsgslbLuaExists(n string) resource.TestCheckFunc {
+func testAccCheckPdnsgslbIfportupExists(n string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -69,13 +69,17 @@ func testAccCheckPdnsgslbLuaExists(n string) resource.TestCheckFunc {
 	}
 }
 
-const testAccCheckPdnsgslbLuaConfig_basic = `
-resource "pdnsgslb_lua" "testlua" {
+const testAccCheckPdnsgslbIfportupConfig_basic = `
+resource "pdnsgslb_ifportup" "testifportup" {
 	zone = "test.internal."
-	name = "testlua"
+	name = "ifportup"
 	record {
-	  rrtype = "TXT"
-	  ttl = 30
-	  snippet = "os.date()"
+	  rrtype = "A"
+	  ttl = 5
+	  port = 443
+	  addresses = [ 
+		"127.0.0.1",
+		"127.0.0.2",
+	  ]
 	}
 }`

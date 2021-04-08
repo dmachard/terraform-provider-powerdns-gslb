@@ -8,27 +8,27 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-func TestAccPdnsgslbLua_basic(t *testing.T) {
+func TestAccPdnsgslbPickrandom_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPdnsgslbLuaDestroy,
+		CheckDestroy: testAccCheckPdnsgslbPickrandomDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckPdnsgslbLuaConfig_basic,
+				Config: testAccCheckPdnsgslbPickrandomConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbLuaExists("pdnsgslb_lua.testlua"),
+					testAccCheckPdnsgslbPickrandomExists("pdnsgslb_pickrandom.testpickrandom"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckPdnsgslbLuaDestroy(s *terraform.State) error {
+func testAccCheckPdnsgslbPickrandomDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "pdnsgslb_lua" {
+		if rs.Type != "pdnsgslb_pickrandom" {
 			continue
 		}
 
@@ -43,7 +43,7 @@ func testAccCheckPdnsgslbLuaDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckPdnsgslbLuaExists(n string) resource.TestCheckFunc {
+func testAccCheckPdnsgslbPickrandomExists(n string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -69,13 +69,16 @@ func testAccCheckPdnsgslbLuaExists(n string) resource.TestCheckFunc {
 	}
 }
 
-const testAccCheckPdnsgslbLuaConfig_basic = `
-resource "pdnsgslb_lua" "testlua" {
+const testAccCheckPdnsgslbPickrandomConfig_basic = `
+resource "pdnsgslb_pickrandom" "testpickrandom" {
 	zone = "test.internal."
-	name = "testlua"
+	name = "testpickrandom"
 	record {
-	  rrtype = "TXT"
-	  ttl = 30
-	  snippet = "os.date()"
+	  rrtype = "A"
+	  ttl = 5
+	  addresses = [ 
+		"127.0.0.1",
+		"127.0.0.7",
+	  ]
 	}
 }`
