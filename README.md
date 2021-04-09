@@ -46,20 +46,16 @@ resource "pdnsgslb_lua" "foo" {
 
 For detailed usage see [provider's documentation page](https://registry.terraform.io/providers/dmachard/powerdns-gslb/latest/docs)
 
-## PowerDNS Requirements
+## PowerDNS tuning
 
-### LUA records support and DNS update
-
-Update your configuration file pdns.conf
+Update your `pdns.conf` configuration file  to enable LUA records and DNS update features.
 
 ```
 enable-lua-records=yes
 dnsupdate=yes
 ```
 
-### TSIG, AXFR support 
-
-Enable TSIG, AXFR and DNSUPDATE on your dns zone `test.internal`
+Then enable the `TSIG` mechanism, `AXFR` and `DNSUPDATE` on your dns zone `test.internal`
 
 ```
 pdnsutil create-tsig-key tsigkey hmac-sha256
