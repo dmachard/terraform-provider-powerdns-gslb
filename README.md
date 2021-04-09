@@ -3,6 +3,11 @@
 A Terraform provider for PowerDNS server to manage LUA records through DNS updates (RFC2136).
 This provider can be to used to have a dynamic behaviour of your PowerDNS server, such as Global Server Load Balancing.
 
+## Requirements
+
+-	[Terraform](https://www.terraform.io/downloads.html) > 0.12
+-	[Go](https://golang.org/doc/install) >= 1.15
+
 ## Using the Provider
 
 ```hcl
@@ -40,3 +45,25 @@ resource "pdnsgslb_lua" "foo" {
 ```
 
 For detailed usage see [provider's documentation page](https://registry.terraform.io/providers/dmachard/powerdns-gslb/latest/docs)
+
+## PowerDNS Requirements
+
+### LUA records support and DNS update
+
+Update your configuration file pdns.conf
+
+```
+enable-lua-records=yes
+dnsupdate=yes
+```
+
+### TSIG, AXFR support 
+
+Enable TSIG, AXFR and DNSUPDATE on your dns zone `test.internal`
+
+```
+pdnsutil create-tsig-key tsigkey hmac-sha256
+pdnsutil set-meta test.internal TSIG-ALLOW-DNSUPDATE tsigkey
+pdnsutil set-meta test.internal TSIG-ALLOW-AXFR tsigkey
+pdnsutil set-meta test.internal ALLOW-DNSUPDATE-FROM 0.0.0.0/0
+```
