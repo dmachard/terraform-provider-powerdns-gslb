@@ -1,18 +1,18 @@
 ---
-page_title: "pdnsgslb_lua Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns-gslb_lua Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
 ---
 
-# pdnsgslb_lua (Resource)
+# powerdns-gslb_lua (Resource)
 
 Creates a [generic LUA](https://doc.powerdns.com/authoritative/lua-records/) DNS record.
 
 ## Example Usage
 
 ```terraform
-resource "pdnsgslb_lua" "svc1" {
+resource "powerdns-gslb_lua" "svc1" {
   zone = "home.internal."
   name = "test_lua"
   record {
@@ -48,5 +48,5 @@ resource "pdnsgslb_lua" "svc1" {
 Records can be imported using the Record Type and FQDN.
 
 ```
-$ terraform import pdnsgslb_lua.foo foo.example.com.
+$ terraform import powerdns-gslb_lua.foo foo.example.com.
 ```

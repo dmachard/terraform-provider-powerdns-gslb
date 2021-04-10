@@ -1,18 +1,18 @@
 ---
-page_title: "pdnsgslb_ifportup Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns-gslb_ifportup Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
 ---
 
-# pdnsgslb_ifportup (Resource)
+# powerdns-gslb_ifportup (Resource)
 
 Creates a [ifportup](https://doc.powerdns.com/authoritative/lua-records/functions.html#ifportup) LUA DNS record. 
 
 ## Example Usage
 
 ```terraform
-resource "pdnsgslb_ifportup" "foo" {
+resource "powerdns-gslb_ifportup" "foo" {
   zone = "home.internal."
   name = "test_ifportup"
   record {
@@ -47,5 +47,5 @@ resource "pdnsgslb_ifportup" "foo" {
 Records can be imported using the Record Type and FQDN.
 
 ```
-$ terraform import pdnsgslb_ifportup.foo foo.example.com.
+$ terraform import powerdns-gslb_ifportup.foo foo.example.com.
 ```

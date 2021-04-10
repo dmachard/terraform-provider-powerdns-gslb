@@ -1,18 +1,18 @@
 ---
-page_title: "pdnsgslb_ifurlup Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns-gslb_ifurlup Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
 ---
 
-# pdnsgslb_ifurlup (Resource)
+# powerdns-gslb_ifurlup (Resource)
 
 Creates a [ifurlup](https://doc.powerdns.com/authoritative/lua-records/functions.html#ifurlup) LUA DNS record. 
 
 ## Example Usage
 
 ```terraform
-resource "pdnsgslb_ifurlup" "foo" {
+resource "powerdns-gslb_ifurlup" "foo" {
   zone = "home.internal."
   name = "test_ifurlup2"
   record {
@@ -55,5 +55,5 @@ resource "pdnsgslb_ifurlup" "foo" {
 Records can be imported using the Record Type and FQDN.
 
 ```
-$ terraform import pdnsgslb_ifurlup.foo foo.example.com.
+$ terraform import powerdns-gslb_ifurlup.foo foo.example.com.
 ```

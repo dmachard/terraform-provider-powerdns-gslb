@@ -17,7 +17,7 @@ func TestAccPdnsgslbPickrandom_basic(t *testing.T) {
 			{
 				Config: testAccCheckPdnsgslbPickrandomConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbPickrandomExists("pdnsgslb_pickrandom.testpickrandom"),
+					testAccCheckPdnsgslbPickrandomExists("powerdns-gslb_pickrandom.testpickrandom"),
 				),
 			},
 		},
@@ -28,7 +28,7 @@ func testAccCheckPdnsgslbPickrandomDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "pdnsgslb_pickrandom" {
+		if rs.Type != "powerdns-gslb_pickrandom" {
 			continue
 		}
 
@@ -70,7 +70,7 @@ func testAccCheckPdnsgslbPickrandomExists(n string) resource.TestCheckFunc {
 }
 
 const testAccCheckPdnsgslbPickrandomConfig_basic = `
-resource "pdnsgslb_pickrandom" "testpickrandom" {
+resource "powerdns-gslb_pickrandom" "testpickrandom" {
 	zone = "test.internal."
 	name = "testpickrandom"
 	record {

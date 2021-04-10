@@ -1,18 +1,18 @@
 ---
-page_title: "pdnsgslb_pickrandom Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns-gslb_pickrandom Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
 ---
 
-# pdnsgslb_pickrandom (Resource)
+# powerdns-gslb_pickrandom (Resource)
 
 Creates a [pickrandom](https://doc.powerdns.com/authoritative/lua-records/functions.html#pickrandom) LUA DNS record.
 
 ## Example Usage
 
 ```terraform
-resource "pdnsgslb_pickrandom" "foo" {
+resource "powerdns-gslb_pickrandom" "foo" {
   zone = "home.internal."
   name = "test_pickrandom"
   record {
@@ -56,5 +56,5 @@ resource "pdnsgslb_pickrandom" "foo" {
 Records can be imported using the Record Type and FQDN.
 
 ```
-$ terraform import pdnsgslb_pickrandom.foo foo.example.com.
+$ terraform import powerdns-gslb_pickrandom.foo foo.example.com.
 ```

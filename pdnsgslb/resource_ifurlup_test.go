@@ -17,7 +17,7 @@ func TestAccPdnsgslbIfurlup_basic(t *testing.T) {
 			{
 				Config: testAccCheckPdnsgslbIfurlupConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbIfurlupExists("pdnsgslb_ifurlup.testifurlup"),
+					testAccCheckPdnsgslbIfurlupExists("powerdns-gslb_ifurlup.testifurlup"),
 				),
 			},
 		},
@@ -28,7 +28,7 @@ func testAccCheckPdnsgslbIfurlupDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "pdnsgslb_ifurlup" {
+		if rs.Type != "powerdns-gslb_ifurlup" {
 			continue
 		}
 
@@ -70,7 +70,7 @@ func testAccCheckPdnsgslbIfurlupExists(n string) resource.TestCheckFunc {
 }
 
 const testAccCheckPdnsgslbIfurlupConfig_basic = `
-resource "pdnsgslb_ifurlup" "testifurlup" {
+resource "powerdns-gslb_ifurlup" "testifurlup" {
 	zone = "test.internal."
 	name = "ifurlup"
 	record {
