@@ -33,7 +33,7 @@ provider "pdnsglsb" {
 }
 
 # Create a LUA DNS record
-resource "pdnsgslb_lua" "foo" {
+resource "powerdns-gslb_lua" "foo" {
   # ...
 }
 ```
