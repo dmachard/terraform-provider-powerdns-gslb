@@ -15,7 +15,7 @@ terraform {
   required_providers {
     pdnsgslb = {
       version = "1.0.0"
-      source  = "dmachard/powerdns_gslb"
+      source  = "dmachard/powerdns-gslb"
     }
   }
 }
@@ -28,7 +28,7 @@ provider "pdnsgslb" {
     key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJN.....ND5BOHzE6ybvy0+dw=="
 }
 
-resource "powerdns_gslb_lua" "foo" {
+resource "powerdns-gslb_lua" "foo" {
   zone = "home.internal."
   name = "foo"
   record {

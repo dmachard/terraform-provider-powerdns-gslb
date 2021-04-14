@@ -1,5 +1,5 @@
 ---
-page_title: "powerdns_gslb_ifportup Resource - terraform-provider-powerdns_gslb"
+page_title: "powerdns-gslb_ifportup Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
@@ -12,7 +12,7 @@ Creates a [ifportup](https://doc.powerdns.com/authoritative/lua-records/function
 ## Example Usage
 
 ```terraform
-resource "powerdns_gslb_ifportup" "foo" {
+resource "powerdns-gslb_ifportup" "foo" {
   zone = "home.internal."
   name = "test_ifportup"
   record {

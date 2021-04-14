@@ -19,7 +19,7 @@ terraform {
   required_providers {
     pdnsgslb = {
       version = "1.0.0"
-      source  = "dmachard/powerdns_gslb"
+      source  = "dmachard/powerdns-gslb"
     }
   }
 }
@@ -33,7 +33,7 @@ provider "pdnsglsb" {
 }
 
 # Create a LUA DNS record
-resource "powerdns_gslb_lua" "foo" {
+resource "powerdns-gslb_lua" "foo" {
   # ...
 }
 ```

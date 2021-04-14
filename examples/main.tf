@@ -2,8 +2,8 @@
 terraform {
   required_providers {
     pdnsgslb = {
-      version = "0.0.1"
-      source  = "github.com/dmachard/powerdns_gslb"
+      version = "1.1.2"
+      source  = "github.com/dmachard/powerdns-gslb"
     }
   }
 }
@@ -17,7 +17,7 @@ provider "pdnsgslb" {
     key_secret    = "+0GMb2Hak8WiMETQjOCEpTTdRjgym6xJbU/W+Fv+jGsFi9Y0LxG82rRFxf4rdOKihUASU2BTCyCskSKFo+o6pw=="
 }
 
-resource "powerdns_gslb_lua" "res1" {
+resource "powerdns-gslb_lua" "res1" {
   zone = "test.internal."
   name = "pdnslua"
   record {
@@ -32,7 +32,7 @@ resource "powerdns_gslb_lua" "res1" {
   }
 }
 
-resource "powerdns_gslb_pickrandom" "res1" {
+resource "powerdns-gslb_pickrandom" "res1" {
   zone = "home.internal."
   name = "pickrandom"
   record {
@@ -55,7 +55,7 @@ resource "powerdns_gslb_pickrandom" "res1" {
 
 }
 
-resource "powerdns_gslb_ifportup" "res3" {
+resource "powerdns-gslb_ifportup" "res3" {
   zone = "home.internal."
   name = "ifportup"
   record {
@@ -70,7 +70,7 @@ resource "powerdns_gslb_ifportup" "res3" {
 }
 
 # actif/actif
-resource "powerdns_gslb_ifurlup" "res4" {
+resource "powerdns-gslb_ifurlup" "res4" {
   zone = "home.internal."
   name = "ifurlup_aa"
   record {
@@ -88,7 +88,7 @@ resource "powerdns_gslb_ifurlup" "res4" {
   }
 }
 
-resource "powerdns_gslb_ifurlup" "res5" {
+resource "powerdns-gslb_ifurlup" "res5" {
   zone = "home.internal."
   name = "ifurlup_backupgo"
   record {

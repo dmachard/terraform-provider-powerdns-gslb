@@ -17,7 +17,7 @@ func TestAccPdnsgslbLua_basic(t *testing.T) {
 			{
 				Config: testAccCheckPdnsgslbLuaConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbLuaExists("powerdns_gslb_lua.testlua"),
+					testAccCheckPdnsgslbLuaExists("powerdns-gslb_lua.testlua"),
 				),
 			},
 		},
@@ -28,7 +28,7 @@ func testAccCheckPdnsgslbLuaDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "powerdns_gslb_lua" {
+		if rs.Type != "powerdns-gslb_lua" {
 			continue
 		}
 
@@ -70,7 +70,7 @@ func testAccCheckPdnsgslbLuaExists(n string) resource.TestCheckFunc {
 }
 
 const testAccCheckPdnsgslbLuaConfig_basic = `
-resource "powerdns_gslb_lua" "testlua" {
+resource "powerdns-gslb_lua" "testlua" {
 	zone = "test.internal."
 	name = "testlua"
 	record {

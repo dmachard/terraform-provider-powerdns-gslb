@@ -1,5 +1,5 @@
 ---
-page_title: "powerdns_gslb_ifurlup Resource - terraform-provider-powerdns_gslb"
+page_title: "powerdns-gslb_ifurlup Resource - terraform-provider-powerdns-gslb"
 subcategory: ""
 description: |-
   
@@ -12,7 +12,7 @@ Creates a [ifurlup](https://doc.powerdns.com/authoritative/lua-records/functions
 ## Example Usage
 
 ```terraform
-resource "powerdns_gslb_ifurlup" "foo" {
+resource "powerdns-gslb_ifurlup" "foo" {
   zone = "home.internal."
   name = "test_ifurlup2"
   record {
