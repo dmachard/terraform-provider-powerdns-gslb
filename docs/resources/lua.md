@@ -1,5 +1,5 @@
 ---
-page_title: "powerdns-gslb_lua Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns_gslb_lua Resource - terraform-provider-powerdns_gslb"
 subcategory: ""
 description: |-
   
@@ -12,7 +12,7 @@ Creates a [generic LUA](https://doc.powerdns.com/authoritative/lua-records/) DNS
 ## Example Usage
 
 ```terraform
-resource "powerdns-gslb_lua" "svc1" {
+resource "powerdns_gslb_lua" "svc1" {
   zone = "home.internal."
   name = "test_lua"
   record {

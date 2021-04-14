@@ -1,4 +1,4 @@
-module github.com/dmachard/terraform-provider-powerdns-gslb
+module github.com/dmachard/terraform-provider-powerdns_gslb
 
 go 1.15
 

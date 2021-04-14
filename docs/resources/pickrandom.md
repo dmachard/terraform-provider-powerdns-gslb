@@ -1,5 +1,5 @@
 ---
-page_title: "powerdns-gslb_pickrandom Resource - terraform-provider-powerdns-gslb"
+page_title: "powerdns_gslb_pickrandom Resource - terraform-provider-powerdns_gslb"
 subcategory: ""
 description: |-
   
@@ -12,7 +12,7 @@ Creates a [pickrandom](https://doc.powerdns.com/authoritative/lua-records/functi
 ## Example Usage
 
 ```terraform
-resource "powerdns-gslb_pickrandom" "foo" {
+resource "powerdns_gslb_pickrandom" "foo" {
   zone = "home.internal."
   name = "test_pickrandom"
   record {

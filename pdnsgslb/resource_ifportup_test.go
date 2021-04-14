@@ -17,7 +17,7 @@ func TestAccPdnsgslbIfportup_basic(t *testing.T) {
 			{
 				Config: testAccCheckPdnsgslbIfportupConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckPdnsgslbIfportupExists("powerdns-gslb_ifportup.testifportup"),
+					testAccCheckPdnsgslbIfportupExists("powerdns_gslb_ifportup.testifportup"),
 				),
 			},
 		},
@@ -28,7 +28,7 @@ func testAccCheckPdnsgslbIfportupDestroy(s *terraform.State) error {
 	c := testAccProvider.Meta().(*Client)
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "powerdns-gslb_ifportup" {
+		if rs.Type != "powerdns_gslb_ifportup" {
 			continue
 		}
 
@@ -70,7 +70,7 @@ func testAccCheckPdnsgslbIfportupExists(n string) resource.TestCheckFunc {
 }
 
 const testAccCheckPdnsgslbIfportupConfig_basic = `
-resource "powerdns-gslb_ifportup" "testifportup" {
+resource "powerdns_gslb_ifportup" "testifportup" {
 	zone = "test.internal."
 	name = "ifportup"
 	record {
