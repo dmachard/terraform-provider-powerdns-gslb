@@ -81,5 +81,6 @@ resource "powerdns-gslb_ifportup" "testifportup" {
 		"127.0.0.1",
 		"127.0.0.2",
 	  ]
+	  timeout = 10
 	}
 }`

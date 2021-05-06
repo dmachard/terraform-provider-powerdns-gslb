@@ -85,5 +85,6 @@ resource "powerdns-gslb_ifurlup" "testifurlup" {
 		backup = [ 
 		]
 	  }
+	  timeout=10
 	}
 }`
