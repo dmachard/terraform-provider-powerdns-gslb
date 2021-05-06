@@ -1,15 +1,15 @@
 
 terraform {
   required_providers {
-    pdnsgslb = {
+    powerdns-gslb = {
       version = "1.2.0"
-      source  = "dmachard/powerdns-gslb"
+      source  = "github.com/dmachard/powerdns-gslb"
     }
   }
 }
 
 # Configure the DNS Provider
-provider "pdnsgslb" {
+provider "powerdns-gslb" {
     server        = "10.0.0.211"
     port = "5353"
     key_name      = "keytest."
