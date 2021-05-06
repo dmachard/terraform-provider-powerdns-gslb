@@ -41,6 +41,7 @@ resource "powerdns-gslb_ifportup" "foo" {
 - **port** (Number) The port number to test connections to.
 - **ttl** (Number) The TTL of the record. Defaults to 0. Optional argument
 - **addresses** (List) A list of strings with the possible IP addresses.
+- **timeout** (Number) Maximum time in seconds that you allow the check to take (default 5)
 
 ## Import
 

@@ -17,15 +17,15 @@ The following features must be enabled on the PDNS server
 
 terraform {
   required_providers {
-    pdnsgslb = {
-      version = "1.0.0"
+    powerdns-gslb = {
+      version = "1.2.0"
       source  = "dmachard/powerdns-gslb"
     }
   }
 }
 
 # Configure the provider
-provider "pdnsglsb" {
+provider "powerdns-gslb" {
     server        = "10.0.0.210"
     key_name      = "test."
     key_algo      = "hmac-sha256"

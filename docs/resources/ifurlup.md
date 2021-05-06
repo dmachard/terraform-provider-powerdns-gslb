@@ -48,7 +48,7 @@ resource "powerdns-gslb_ifurlup" "foo" {
 - **addresses/primary** (List) First set of addresses to check, if an IP address from the first set is available, it will be returned. 
 - **addresses/backup** (List) Second set of addresses to check when no addresses work in the first set.
 - **stringmatch** (String) Check url for this string, only declare ‘up’ if found. Optional argument.
-
+- **timeout** (Number) Maximum time in seconds that you allow the check to take (default 5)
 
 ## Import
 

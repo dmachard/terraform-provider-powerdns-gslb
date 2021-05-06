@@ -2,8 +2,8 @@
 terraform {
   required_providers {
     pdnsgslb = {
-      version = "1.1.2"
-      source  = "github.com/dmachard/powerdns-gslb"
+      version = "1.2.0"
+      source  = "dmachard/powerdns-gslb"
     }
   }
 }

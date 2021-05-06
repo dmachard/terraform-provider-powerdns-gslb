@@ -75,6 +75,11 @@ func resourceIfUrlUp() *schema.Resource {
 							Optional: true,
 							Default:  "",
 						},
+						"timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Default:  5,
+						},
 					},
 				},
 			},
@@ -180,7 +185,7 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 		addresses = append(addresses, map_addrs)
 
 		// continue to decode settings
-		re4 := regexp.MustCompile(`stringmatch='(?P<stringmatch>.*)'`)
+		re4 := regexp.MustCompile(`stringmatch='(?P<stringmatch>.*)', timeout=(?P<timeout>.*)`)
 		param3 := matches_func[re.SubexpIndex("param3")]
 		matches_opts := re4.FindStringSubmatch(param3)
 
@@ -189,6 +194,8 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 			continue
 		}
 		stringmatch := matches_opts[re4.SubexpIndex("stringmatch")]
+		timeout_str := matches_opts[re4.SubexpIndex("timeout")]
+		timeout, _ := strconv.Atoi(timeout_str)
 
 		urr := make(map[string]interface{})
 		urr["rrtype"] = rrtype
@@ -196,6 +203,7 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 		urr["stringmatch"] = stringmatch
 		urr["url"] = url
 		urr["ttl"] = rr.Hdr.Ttl
+		urr["timeout"] = timeout
 
 		records = append(records, urr)
 	}
@@ -265,6 +273,7 @@ func ifUrlUpToLuaSnippet(records []interface{}) []interface{} {
 	for _, rr := range records {
 		rec := rr.(map[string]interface{})
 
+		timeout := rec["timeout"].(int)
 		url := rec["url"].(string)
 		stringmatch := rec["stringmatch"].(string)
 
@@ -286,13 +295,14 @@ func ifUrlUpToLuaSnippet(records []interface{}) []interface{} {
 		snippet_lua := fmt.Sprintf("ifurlup(")
 		snippet_lua += fmt.Sprintf("'%s', ", url)
 		snippet_lua += "{{" + strings.Join(primary_list, ",") + "}, {" + strings.Join(backup_list, ",") + "} }"
-		snippet_lua += fmt.Sprintf(",{stringmatch='%s'}", stringmatch)
+		snippet_lua += fmt.Sprintf(",{stringmatch='%s', timeout=%s}", stringmatch, strconv.Itoa(timeout))
 		snippet_lua += ")"
 
 		rr_new := map[string]interface{}{}
 		rr_new["rrtype"] = rec["rrtype"].(string)
 		rr_new["ttl"] = rec["ttl"].(int)
 		rr_new["snippet"] = snippet_lua
+		rr_new["timeout"] = timeout
 
 		rrset = append(rrset, rr_new)
 	}

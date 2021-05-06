@@ -56,6 +56,11 @@ func resourceIfPortUp() *schema.Resource {
 							Optional: true,
 							Default:  0,
 						},
+						"timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Default:  5,
+						},
 					},
 				},
 			},
@@ -121,7 +126,7 @@ func resourceIfPortUpRead(ctx context.Context, d *schema.ResourceData, m interfa
 		snippet, _ := hex.DecodeString(rr.Rdata[6:])
 
 		// search pickrandom function in snippet
-		re := regexp.MustCompile(`ifportup\((?P<param1>\d+),\s*{(?P<param2>.*)}\)`)
+		re := regexp.MustCompile(`ifportup\((?P<param1>\d+),\s*{(?P<param2>.*)},\s*{(?P<param3>.*)}\)`)
 		matches_func := re.FindStringSubmatch(string(snippet))
 
 		// no match, ignore record
@@ -143,11 +148,24 @@ func resourceIfPortUpRead(ctx context.Context, d *schema.ResourceData, m interfa
 			addresses = append(addresses, match[re2.SubexpIndex("ip")])
 		}
 
+		// continue to decode settings
+		re4 := regexp.MustCompile(`timeout=(?P<timeout>.*)`)
+		param3 := matches_func[re.SubexpIndex("param3")]
+		matches_opts := re4.FindStringSubmatch(param3)
+
+		// no match, ignore record
+		if len(matches_opts) == 0 {
+			continue
+		}
+		timeout_str := matches_opts[re4.SubexpIndex("timeout")]
+		timeout, _ := strconv.Atoi(timeout_str)
+
 		urr := make(map[string]interface{})
 		urr["rrtype"] = rrtype
 		urr["addresses"] = addresses
 		urr["port"] = port_int
 		urr["ttl"] = rr.Hdr.Ttl
+		urr["timeout"] = timeout
 
 		records = append(records, urr)
 	}
@@ -215,6 +233,7 @@ func ifPortUpToLuaSnippet(records []interface{}) []interface{} {
 	for _, rr := range records {
 		rec := rr.(map[string]interface{})
 
+		timeout := rec["timeout"].(int)
 		portnum := rec["port"].(int)
 		addresses := rec["addresses"].([]interface{})
 		addresses_list := make([]string, len(addresses))
@@ -226,12 +245,14 @@ func ifPortUpToLuaSnippet(records []interface{}) []interface{} {
 		snippet_lua := fmt.Sprintf("ifportup(")
 		snippet_lua += fmt.Sprintf("%s, ", strconv.Itoa(portnum))
 		snippet_lua += "{" + strings.Join(addresses_list, ",") + "}"
+		snippet_lua += fmt.Sprintf(",{timeout=%s}", strconv.Itoa(timeout))
 		snippet_lua += ")"
 
 		rr_new := map[string]interface{}{}
 		rr_new["rrtype"] = rec["rrtype"].(string)
 		rr_new["ttl"] = rec["ttl"].(int)
 		rr_new["snippet"] = snippet_lua
+		rr_new["timeout"] = rec["timeout"].(int)
 
 		rrset = append(rrset, rr_new)
 	}
