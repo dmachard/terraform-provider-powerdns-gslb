@@ -13,15 +13,15 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 ```hcl
 terraform {
   required_providers {
-    pdnsgslb = {
-      version = "1.0.0"
+    powerdns-gslb = {
+      version = "1.2.0"
       source  = "dmachard/powerdns-gslb"
     }
   }
 }
 
 # Configure the DNS Provider
-provider "pdnsgslb" {
+provider "powerdns-gslb" {
     server        = "10.0.0.210"
     key_name      = "test."
     key_algo      = "hmac-sha256"
