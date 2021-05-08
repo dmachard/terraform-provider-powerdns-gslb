@@ -11,10 +11,10 @@ terraform {
 # Configure the DNS Provider
 provider "powerdns-gslb" {
     server        = "10.0.0.211"
-    port = "5353"
+    port          = "5353"
     key_name      = "keytest."
     key_algo      = "hmac-sha256"
-    key_secret    = "+0GMb2Hak8WiMETQjOCEpTTdRjgym6xJbU/W+Fv+jGsFi9Y0LxG82rRFxf4rdOKihUASU2BTCyCskSKFo+o6pw=="
+    key_secret    = "i4Yx6bmTJBRVLWub97qJqull3xZVIak4wz5P4x5HudIqnQ9X56x7befQAvqgGEdk5LOD0vqwomiZZb+OmTvTQQ=="
 }
 
 resource "powerdns-gslb_lua" "res1" {
@@ -33,7 +33,7 @@ resource "powerdns-gslb_lua" "res1" {
 }
 
 resource "powerdns-gslb_pickrandom" "res1" {
-  zone = "home.internal."
+  zone = "test.internal."
   name = "pickrandom"
   record {
     rrtype = "A"
@@ -56,7 +56,7 @@ resource "powerdns-gslb_pickrandom" "res1" {
 }
 
 resource "powerdns-gslb_ifportup" "res3" {
-  zone = "home.internal."
+  zone = "test.internal."
   name = "ifportup"
   record {
     rrtype = "A"
@@ -71,7 +71,7 @@ resource "powerdns-gslb_ifportup" "res3" {
 
 # actif/actif
 resource "powerdns-gslb_ifurlup" "res4" {
-  zone = "home.internal."
+  zone = "test.internal."
   name = "ifurlup_aa"
   record {
     rrtype = "A"
@@ -89,7 +89,7 @@ resource "powerdns-gslb_ifurlup" "res4" {
 }
 
 resource "powerdns-gslb_ifurlup" "res5" {
-  zone = "home.internal."
+  zone = "test.internal."
   name = "ifurlup_backupgo"
   record {
     rrtype = "A"
@@ -104,5 +104,22 @@ resource "powerdns-gslb_ifurlup" "res5" {
       ]
     }
     stringmatch="Google"
+  }
+}
+
+resource "powerdns-gslb_pickwrandom" "res6" {
+  zone = "test.internal."
+  name = "pickwrandom"
+  record {
+    rrtype = "A"
+    ttl = 5
+    ipaddress {
+        weight = 10
+        ip = "192.168.1.1"
+    }
+    ipaddress {
+        weight = 100
+        ip = "192.168.1.2"
+    }
   }
 }
