@@ -126,7 +126,7 @@ func resourceIfPortUpRead(ctx context.Context, d *schema.ResourceData, m interfa
 		snippet, _ := hex.DecodeString(rr.Rdata[6:])
 
 		// search pickrandom function in snippet
-		re := regexp.MustCompile(`ifportup\((?P<param1>\d+),\s*{(?P<param2>.*)},\s*{(?P<param3>.*)}\)`)
+		re := regexp.MustCompile(`ifportup\((?P<port>\d+),\s*{(?P<addrs>.*)},\s*{(?P<options>.*)}\)`)
 		matches_func := re.FindStringSubmatch(string(snippet))
 
 		// no match, ignore record
@@ -134,14 +134,14 @@ func resourceIfPortUpRead(ctx context.Context, d *schema.ResourceData, m interfa
 			continue
 		}
 
-		// get addresses paramters
-		param1 := matches_func[re.SubexpIndex("param1")]
-		port_int, _ := strconv.Atoi(param1)
+		// get port parameter
+		port := matches_func[re.SubexpIndex("port")]
+		port_int, _ := strconv.Atoi(port)
 
 		// ok, continue to decode addresses parameters
 		re2 := regexp.MustCompile(`(?U)'(?P<ip>.*)'`)
-		param2 := matches_func[re.SubexpIndex("param2")]
-		matches_opt := re2.FindAllStringSubmatch(param2, -1)
+		addrs := matches_func[re.SubexpIndex("addrs")]
+		matches_opt := re2.FindAllStringSubmatch(addrs, -1)
 
 		var addresses []string
 		for _, match := range matches_opt {
@@ -150,8 +150,8 @@ func resourceIfPortUpRead(ctx context.Context, d *schema.ResourceData, m interfa
 
 		// continue to decode settings
 		re4 := regexp.MustCompile(`timeout=(?P<timeout>.*)`)
-		param3 := matches_func[re.SubexpIndex("param3")]
-		matches_opts := re4.FindStringSubmatch(param3)
+		options := matches_func[re.SubexpIndex("options")]
+		matches_opts := re4.FindStringSubmatch(options)
 
 		// no match, ignore record
 		if len(matches_opts) == 0 {

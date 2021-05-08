@@ -145,7 +145,7 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 		snippet, _ := hex.DecodeString(rr.Rdata[6:])
 
 		// search pickrandom function in snippet
-		re := regexp.MustCompile(`ifurlup\('(?P<param1>.*)\',\s*{(?P<param2>.*)},\s*{(?P<param3>.*)}\)`)
+		re := regexp.MustCompile(`ifurlup\('(?P<url>.*)\',\s*{(?P<addrs>.*)},\s*{(?P<options>.*)}\)`)
 		matches_func := re.FindStringSubmatch(string(snippet))
 
 		// no match, ignore record
@@ -154,27 +154,27 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 		}
 
 		// get addresses paramters
-		url := matches_func[re.SubexpIndex("param1")]
+		url := matches_func[re.SubexpIndex("url")]
 
 		// continue to decode addresses parameters
-		re2 := regexp.MustCompile(`{(?P<param1>.*)},\s*{(?P<param2>.*)}`)
-		param2 := matches_func[re.SubexpIndex("param2")]
-		matches_addresses := re2.FindStringSubmatch(param2)
+		re2 := regexp.MustCompile(`{(?P<primary_addrs>.*)},\s*{(?P<backup_addrs>.*)}`)
+		addrs := matches_func[re.SubexpIndex("addrs")]
+		matches_addrs := re2.FindStringSubmatch(addrs)
 
 		re3 := regexp.MustCompile(`(?U)'(?P<ip>.*)'`)
-		addrs_param1 := matches_addresses[re2.SubexpIndex("param1")]
-		matches_addrs_param1 := re3.FindAllStringSubmatch(addrs_param1, -1)
+		primary_addrs := matches_addrs[re2.SubexpIndex("primary_addrs")]
+		matches_primary_addrs := re3.FindAllStringSubmatch(primary_addrs, -1)
 
-		addrs_param2 := matches_addresses[re2.SubexpIndex("param2")]
-		matches_addrs_param2 := re3.FindAllStringSubmatch(addrs_param2, -1)
+		backup_addrs := matches_addrs[re2.SubexpIndex("backup_addrs")]
+		matches_backup_addrs := re3.FindAllStringSubmatch(backup_addrs, -1)
 
 		var addrs_primary []string
-		for _, match := range matches_addrs_param1 {
+		for _, match := range matches_primary_addrs {
 			addrs_primary = append(addrs_primary, match[re3.SubexpIndex("ip")])
 		}
 
 		var addrs_backup []string
-		for _, match := range matches_addrs_param2 {
+		for _, match := range matches_backup_addrs {
 			addrs_backup = append(addrs_backup, match[re3.SubexpIndex("ip")])
 		}
 
@@ -186,8 +186,8 @@ func resourceIfUrlUpRead(ctx context.Context, d *schema.ResourceData, m interfac
 
 		// continue to decode settings
 		re4 := regexp.MustCompile(`stringmatch='(?P<stringmatch>.*)', timeout=(?P<timeout>.*)`)
-		param3 := matches_func[re.SubexpIndex("param3")]
-		matches_opts := re4.FindStringSubmatch(param3)
+		options := matches_func[re.SubexpIndex("options")]
+		matches_opts := re4.FindStringSubmatch(options)
 
 		// no match, ignore record
 		if len(matches_opts) == 0 {
