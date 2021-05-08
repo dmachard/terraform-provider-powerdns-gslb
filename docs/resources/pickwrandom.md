@@ -41,7 +41,6 @@ resource "powerdns-gslb_pickwrandom" "foo" {
 ### Record set
 
 - **rrtype** (String) The query type of the record (A, AAAA, ...)
-- **addresses** (List) A list of strings with the possible IP addresses.
 - **ipaddress/weight** (Number) Weight for the associated ip address
 - **ipaddress/ip** (String) Ip address 
 - **ttl** (Number) The TTL of the record. Defaults to 0. Optional argument
