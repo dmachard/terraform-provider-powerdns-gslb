@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - master
 
 env:
   PDNSGLSB_DNSUPDATE_SERVER: "127.0.0.1"
@@ -13,11 +16,11 @@ env:
   PDNSGLSB_DNSUPDATE_KEYNAME: "keytest."
   TF_ACC: "true"
 jobs:
-  release:
+  testing:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-go@v1
+    - uses: actions/setup-go@v2
       with:
         go-version: '1.15'
     - name: Deploy powerdns auth docker image
