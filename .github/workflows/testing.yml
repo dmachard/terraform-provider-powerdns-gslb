@@ -18,6 +18,9 @@ env:
 jobs:
   testing:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        pdns: [pdns-auth-44, pdns-auth-45]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
@@ -25,7 +28,7 @@ jobs:
         go-version: '1.16'
     - name: Deploy powerdns auth docker image
       run: |
-        sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/pdns-auth-44
+        sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/${{ matrix.pdns }}
         sudo netstat -anp |grep 5353
     - name: Configure powerdns
       run: |
