@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     branches:
-      - master
+      - main
 
 env:
   PDNSGLSB_DNSUPDATE_SERVER: "127.0.0.1"
