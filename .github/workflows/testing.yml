@@ -30,7 +30,6 @@ jobs:
       run: |
         sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/${{ matrix.pdns }}
         sudo netstat -anp |grep 5353
-        sudo docker exec powerdns pdns_server --version
     - name: Configure powerdns
       run: |
         sudo docker exec powerdns pdnsutil create-zone test.internal ns1.test.internal
