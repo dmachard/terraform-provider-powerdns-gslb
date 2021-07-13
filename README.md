@@ -1,5 +1,8 @@
 # Terraform Provider PowerDNS GLSB records
 
+![pdns-auth 4.4](https://img.shields.io/badge/4.4-tested-green) ![pdns-auth 4.5](https://img.shields.io/badge/4.5-tested-green)
+
+
 A Terraform provider for PowerDNS server to manage LUA records through DNS updates (RFC2136).
 This provider can be to used to have a dynamic behaviour of your PowerDNS server, such as Global Server Load Balancing.
 
@@ -14,7 +17,7 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 terraform {
   required_providers {
     powerdns-gslb = {
-      version = "1.2.0"
+      version = "1.3.0"
       source  = "dmachard/powerdns-gslb"
     }
   }
