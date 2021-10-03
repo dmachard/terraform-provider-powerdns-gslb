@@ -30,6 +30,7 @@ provider "powerdns-gslb" {
     key_secret    = "SxEKov9vWTM+c7k9G6ho5nKX1cJN.....ND5BOHzE6ybvy0+dw=="
 }
 
+# Generic LUA record
 resource "powerdns-gslb_lua" "foo" {
   zone = "home.internal."
   name = "foo"
