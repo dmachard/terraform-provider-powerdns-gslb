@@ -1,6 +1,6 @@
 module github.com/dmachard/terraform-provider-powerdns-gslb
 
-go 1.16
+go 1.17
 
 require (
 	github.com/bodgit/tsig v1.1.1
