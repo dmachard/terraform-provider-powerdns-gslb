@@ -15,21 +15,27 @@ env:
   PDNSGLSB_DNSUPDATE_KEYSECRET: "i4Yx6bmTJBRVLWub97qJqull3xZVIak4wz5P4x5HudIqnQ9X56x7befQAvqgGEdk5LOD0vqwomiZZb+OmTvTQQ=="
   PDNSGLSB_DNSUPDATE_KEYNAME: "keytest."
   TF_ACC: "true"
+
 jobs:
   testing:
     runs-on: ubuntu-20.04
+
     strategy:
       matrix:
         pdns: [pdns-auth-44, pdns-auth-45]
+        go: [1.15, 1.16, 1.17]
+
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
       with:
-        go-version: '1.15'
+        go-version: ${{ matrix.go }}
+
     - name: Deploy powerdns auth docker image
       run: |
         sudo docker run -d -p 5353:53/udp -p 5353:53/tcp --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.d/pdns.conf:ro powerdns/${{ matrix.pdns }}
         sudo netstat -anp |grep 5353
+
     - name: Configure powerdns
       run: |
         sudo docker exec powerdns pdnsutil create-zone test.internal ns1.test.internal
@@ -37,6 +43,7 @@ jobs:
         sudo docker exec powerdns pdnsutil set-meta test.internal TSIG-ALLOW-DNSUPDATE ${PDNSGLSB_DNSUPDATE_KEYNAME}
         sudo docker exec powerdns pdnsutil set-meta test.internal TSIG-ALLOW-AXFR ${PDNSGLSB_DNSUPDATE_KEYNAME}
         sudo docker exec powerdns pdnsutil set-meta test.internal ALLOW-DNSUPDATE-FROM 0.0.0.0/0
+
     - name: Running tests
       run: |
         go test ./pdnsgslb/
