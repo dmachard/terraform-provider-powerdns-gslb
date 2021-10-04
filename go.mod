@@ -1,6 +1,6 @@
 module github.com/dmachard/terraform-provider-powerdns-gslb
 
-go 1.17
+go 1.16
 
 require (
 	github.com/agext/levenshtein v1.2.3 // indirect
