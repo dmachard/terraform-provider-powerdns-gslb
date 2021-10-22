@@ -18,7 +18,7 @@ The following features must be enabled on the PDNS server
 terraform {
   required_providers {
     powerdns-gslb = {
-      version = "1.2.0"
+      version = "1.3.1"
       source  = "dmachard/powerdns-gslb"
     }
   }
