@@ -22,13 +22,14 @@ jobs:
 
     strategy:
       matrix:
+        go-version: ['1.16', '1.17']
         pdns: [pdns-auth-44, pdns-auth-45]
 
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
       with:
-        go-version: '1.16'
+        go-version: ${{ matrix.go-version }}
 
     - name: Deploy powerdns auth docker image
       run: |
