@@ -1,15 +1,14 @@
 # Terraform Provider PowerDNS GLSB records
 
-![pdns-auth 4.4](https://img.shields.io/badge/pdns_auth%204.4-tested-green) ![pdns-auth 4.5](https://img.shields.io/badge/pdns_auth%204.5-tested-green)
-![pdns-auth 4.6](https://img.shields.io/badge/pdns_auth%204.6-tested-green)
+![pdns-auth 4.6](https://img.shields.io/badge/pdns_auth%204.8-tested-green) ![pdns-auth 4.7](https://img.shields.io/badge/pdns_auth%204.7-tested-green) ![pdns-auth 4.6](https://img.shields.io/badge/pdns_auth%204.6-tested-green) ![pdns-auth 4.5](https://img.shields.io/badge/pdns_auth%204.5-tested-green) ![pdns-auth 4.4](https://img.shields.io/badge/pdns_auth%204.4-tested-green)
 
 A Terraform provider for PowerDNS server to manage LUA records through DNS updates (RFC2136).
 This provider can be to used to have a dynamic behaviour of your PowerDNS server, such as Global Server Load Balancing.
 
 ## Requirements
 
--	[Terraform](https://www.terraform.io/downloads.html) > 0.12
--	[Go](https://golang.org/doc/install) >= 1.18
+- [Terraform](https://www.terraform.io/downloads.html) > 0.12
+- [Go](https://golang.org/doc/install) >= 1.18
 
 ## Using the Provider
 
@@ -54,14 +53,14 @@ For detailed usage see [provider's documentation page](https://registry.terrafor
 
 Update your `pdns.conf` configuration file  to enable LUA records and DNS update features.
 
-```
+```ini
 enable-lua-records=yes
 dnsupdate=yes
 ```
 
 Then enable the `TSIG` mechanism, `AXFR` and `DNSUPDATE` on your dns zone `test.internal`
 
-```
+```bash
 pdnsutil create-tsig-key tsigkey hmac-sha256
 pdnsutil set-meta test.internal TSIG-ALLOW-DNSUPDATE tsigkey
 pdnsutil set-meta test.internal TSIG-ALLOW-AXFR tsigkey
