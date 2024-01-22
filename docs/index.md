@@ -6,8 +6,9 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 ## Requirements
 
 The following features must be enabled on the PDNS server
+
 - LUA records feature enabled
-- DNS UPDATE enabled 
+- DNS UPDATE enabled
 - TSIG (RFC 2845) which is required authentication
 - DNS zone transfer, which is required for listing of LUA records.
 
@@ -18,7 +19,7 @@ The following features must be enabled on the PDNS server
 terraform {
   required_providers {
     powerdns-gslb = {
-      version = "1.3.1"
+      version = "1.4.0"
       source  = "dmachard/powerdns-gslb"
     }
   }
