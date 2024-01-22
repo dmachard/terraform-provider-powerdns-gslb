@@ -8,7 +8,7 @@ This provider can be to used to have a dynamic behaviour of your PowerDNS server
 ## Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) > 0.12
-- [Go](https://golang.org/doc/install) >= 1.18
+- [Go](https://golang.org/doc/install) >= 1.20
 
 ## Using the Provider
 
