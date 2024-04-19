@@ -22,8 +22,8 @@ jobs:
 
     strategy:
       matrix:
-        go-version: ['1.20', '1.21']
-        pdns: [pdns-auth-44, pdns-auth-45, pdns-auth-46, pdns-auth-47, pdns-auth-48]
+        go-version: ['1.20', '1.21', '1.22']
+        pdns: [pdns-auth-44, pdns-auth-45, pdns-auth-46, pdns-auth-47, pdns-auth-48, pdns-auth-49]
 
     steps:
     - uses: actions/checkout@v4
