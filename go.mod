@@ -1,8 +1,7 @@
 module github.com/dmachard/terraform-provider-powerdns-gslb
 
 go 1.22.0
-
-toolchain go1.23.2
+toolchain go1.24.1
 
 require (
 	github.com/bodgit/tsig v1.2.2
@@ -50,7 +49,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/zclconf/go-cty v1.16.2 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
