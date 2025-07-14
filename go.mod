@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/bodgit/tsig v1.2.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
-	github.com/miekg/dns v1.1.66
+	github.com/miekg/dns v1.1.67
 )
 
 require (
@@ -52,11 +52,11 @@ require (
 	github.com/zclconf/go-cty v1.16.2 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
-	golang.org/x/tools v0.32.0 // indirect
+	golang.org/x/tools v0.33.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250218202821-56aae31c358a // indirect
 	google.golang.org/grpc v1.72.1 // indirect
