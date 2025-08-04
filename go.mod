@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/bodgit/tsig v1.2.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
-	github.com/miekg/dns v1.1.67
+	github.com/miekg/dns v1.1.68
 )
 
 require (
