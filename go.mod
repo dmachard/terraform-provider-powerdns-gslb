@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/bodgit/tsig v1.2.2
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.38.1
-	github.com/miekg/dns v1.1.70
+	github.com/miekg/dns v1.1.72
 )
 
 require (
