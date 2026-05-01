@@ -3,7 +3,7 @@ module github.com/dmachard/terraform-provider-powerdns-gslb
 go 1.25.8
 
 require (
-	github.com/bodgit/tsig v1.2.2
+	github.com/bodgit/tsig v1.3.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.1
 	github.com/miekg/dns v1.1.72
 )
